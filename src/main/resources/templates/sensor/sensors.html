@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sensors</title>
+    <link rel="stylesheet" href="/css/table.css">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<div th:insert="~{fragment :: header}"></div>
+<div th:with="isAdmin=${#authorization.expression('hasAuthority(''ADMINISTRATOR'')')}">
+    <form action="/sensors">
+        <div>
+            <label for="name">Name:</label>
+            <input id="name" type="text" name="name" th:value="${filter.name()}">
+        </div>
+        <div>
+            <label for="model">Model:</label>
+            <input id="model" type="text" name="model" th:value="${filter.model()}">
+        </div>
+        <button type="submit">Filter</button>
+    </form>
+    <a th:if="${isAdmin}" th:href="'/sensors/create'">Create new sensor</a>
+    <table th:if="${!sensors.isEmpty()}">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Model</th>
+            <th>Range</th>
+            <th>Type</th>
+            <th>Unit</th>
+            <th>Location</th>
+            <th th:if="${isAdmin}" class="short-column">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="sensor : ${sensors}">
+            <td th:text="${sensor.name}">Name</td>
+            <td th:text="${sensor.model}">Model</td>
+            <td th:text="${sensor.range.from} + ' — ' + ${sensor.range.to}">Range</td>
+            <td th:text="${sensor.type.getValue()}">Type</td>
+            <td th:text="${sensor.unit?.getValue()}">Unit</td>
+            <td th:text="${sensor.location}">Location</td>
+            <td th:if="${isAdmin}" class="flex-row">
+                <a th:href="@{'/sensors/' + ${sensor.id}}">Edit</a>
+                <form th:action="@{/sensors/{sensorId}/delete(sensorId=${sensor.id})}" method="post">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create new sensor</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<div th:insert="~{fragment :: header}"></div>
+<form th:action="@{/sensors}" method="post" th:object="${sensor}">
+    <div>
+        <label for="name">Name:</label>
+        <input id="name" type="text" name="name" th:value="*{name}" required>
+    </div>
+    <div>
+        <label for="model">Model:</label>
+        <input id="model" type="text" name="model" th:value="*{model}" required>
+    </div>
+    <div>
+        <label for="fromValue">From:</label>
+        <input id="fromValue" type="number" min="0" name="fromValue" th:value="*{fromValue}" required>
+    </div>
+    <div>
+        <label for="toValue">To:</label>
+        <input id="toValue" type="number" min="0" name="toValue" th:value="*{toValue}" required>
+    </div>
+    <div>
+        <label for="type">Type:</label>
+        <select id="type" name="typeId">
+            <option th:each="type : ${types}"
+                    th:value="${type.getId()}"
+                    th:selected="${type.getId() == sensor.typeId}"
+                    th:text="${type.getValue()}">Type
+            </option>
+        </select>
+    </div>
+    <div>
+        <label for="unit">Unit:</label>
+        <select id="unit" name="unitId">
+            <option value=""></option>
+            <option th:each="unit : ${units}"
+                    th:value="${unit.getId()}"
+                    th:selected="${unit.getId() == sensor.unitId}"
+                    th:text="${unit.getValue()}">Unit
+            </option>
+        </select>
+    </div>
+    <div>
+        <label for="location">Location:</label>
+        <input id="location" type="text" name="location" th:value="*{location}">
+    </div>
+    <div>
+        <label for="description">Description:</label>
+        <input id="description" type="text" name="description" th:value="*{description}">
+    </div>
+    <button type="submit">Create</button>
+</form>
+<a th:href="'/sensors'">Show All</a>
+<div th:if="${errors}">
+    <p style="color: red" th:each="error : ${errors}" th:text="${error.defaultMessage}">Error</p>
+</div>
+</body>
+</html>
