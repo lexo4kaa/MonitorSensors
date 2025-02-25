@@ -38,14 +38,16 @@ public class SensorRestController {
     private final UnitService unitService;
 
     @GetMapping
-    public List<SensorReadDto> findAll(@RequestParam(required = false) String name,
-                                       @RequestParam(required = false) String model) {
-        return sensorService.findAll(new SensorFilter(name, model));
+    public ResponseEntity<List<SensorReadDto>> findAll(@RequestParam(required = false) String name,
+                                                       @RequestParam(required = false) String model) {
+        return ResponseEntity.ok(sensorService.findAll(new SensorFilter(name, model)));
     }
 
     @GetMapping("/{id}")
-    public SensorReadDto findById(@PathVariable("id") Integer id) {
-        return sensorService.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public ResponseEntity<?> findById(@PathVariable("id") Integer id) {
+        return sensorService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping

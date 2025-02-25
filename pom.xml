@@ -13,21 +13,12 @@
     <version>1.0</version>
     <name>MonitorSensors</name>
     <description>Demo project for AGSR</description>
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
     <properties>
         <java.version>17</java.version>
+        <mysql.version>9.2.0</mysql.version>
+        <jwt.version>0.12.6</jwt.version>
+        <springdoc-openapi-starter-webmvc-ui.version>2.8.4</springdoc-openapi-starter-webmvc-ui.version>
+        <thymeleaf-extras-springsecurity6.version>3.1.3.RELEASE</thymeleaf-extras-springsecurity6.version>
     </properties>
     <dependencies>
         <dependency>
@@ -63,13 +54,13 @@
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity6</artifactId>
-            <version>3.1.3.RELEASE</version>
+            <version>${thymeleaf-extras-springsecurity6.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
-            <version>9.2.0</version>
+            <version>${mysql.version}</version>
         </dependency>
 
         <dependency>
@@ -85,7 +76,23 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>2.8.4</version>
+            <version>${springdoc-openapi-starter-webmvc-ui.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>${jwt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${jwt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>${jwt.version}</version>
         </dependency>
     </dependencies>
 

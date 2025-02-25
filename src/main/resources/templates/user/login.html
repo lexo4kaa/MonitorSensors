@@ -11,7 +11,7 @@
     </style>
 </head>
 <body>
-<form th:action="@{/login}" method="post">
+<form method="post">
     <div style="color: red" th:if="${param.error}">
         Неверный логин и/или пароль
     </div>
@@ -26,4 +26,30 @@
     <button type="submit">Login</button>
 </form>
 </body>
+<script>
+    document.getElementsByTagName('form')[0].addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        try {
+            const formData = new FormData(this);
+            const body = Object.fromEntries(formData.entries());
+
+            const response = await fetch('/api/v1/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(body)
+            });
+
+            if (response.ok) {
+                window.location.href = "/sensors";
+            } else {
+                window.location.href = '/login?error';
+            }
+        } catch (ex) {
+            console.log(ex);
+        }
+    })
+</script>
 </html>
