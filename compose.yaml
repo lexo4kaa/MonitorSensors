@@ -1,10 +1,14 @@
 services:
-  app:
+  sensors-app:
     build:
       context: .
       dockerfile: Dockerfile
+    env_file:
+      - .env
     ports:
       - "8080:8080"
+    networks:
+      - monitor-sensors
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/${DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
@@ -20,8 +24,10 @@ services:
       MYSQL_DATABASE: ${DB_NAME}
     ports:
       - "3307:3306"
+    networks:
+      - monitor-sensors
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -31,3 +37,6 @@ services:
 volumes:
   db-data:
 
+networks:
+  monitor-sensors:
+    external: true
