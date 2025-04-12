@@ -6,48 +6,54 @@ import com.krupenko.MonitorSensors.database.entity.Unit;
 import com.krupenko.MonitorSensors.database.repository.TypeRepository;
 import com.krupenko.MonitorSensors.database.repository.UnitRepository;
 import com.krupenko.MonitorSensors.dto.SensorCreateEditDto;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
-@Component
-@RequiredArgsConstructor
-public class SensorCreateEditMapper implements Mapper<SensorCreateEditDto, Sensor> {
+@Mapper(componentModel = "spring", uses = {TypeMapper.class, UnitMapper.class})
+public interface SensorCreateEditMapper {
 
-    private final TypeRepository typeRepository;
-    private final UnitRepository unitRepository;
+    @Mapping(source = "typeId", target = "type")
+    @Mapping(source = "unitId", target = "unit")
+    @Mapping(source = "fromValue", target = "from")
+    @Mapping(source = "toValue", target = "to")
+    Sensor sensorCreateEditDtoToSensor(SensorCreateEditDto fromObject, @MappingTarget Sensor toObject);
 
-    @Override
-    public Sensor map(SensorCreateEditDto fromObject, Sensor toObject) {
-        copy(fromObject, toObject);
-        return toObject;
+    @Mapping(source = "typeId", target = "type")
+    @Mapping(source = "unitId", target = "unit")
+    @Mapping(source = "fromValue", target = "from")
+    @Mapping(source = "toValue", target = "to")
+    Sensor sensorCreateEditDtoToSensor(SensorCreateEditDto object);
+
+}
+
+@Mapper(componentModel = "spring")
+abstract class TypeMapper {
+
+    @Autowired
+    protected TypeRepository typeRepository;
+
+    protected Type typeIdToType(Integer typeId) {
+        return Optional.ofNullable(typeId)
+                .flatMap(typeRepository::findById)
+                .orElseThrow(IllegalArgumentException::new);
     }
 
-    @Override
-    public Sensor map(SensorCreateEditDto object) {
-        Sensor sensor = new Sensor();
-        copy(object, sensor);
-        return sensor;
-    }
+}
 
-    private void copy(SensorCreateEditDto object, Sensor sensor) {
-        sensor.setName(object.getName());
-        sensor.setModel(object.getModel());
-        sensor.setFrom(object.getFromValue());
-        sensor.setTo(object.getToValue());
-        sensor.setType(getType(object.getTypeId()));
-        sensor.setUnit(getUnit(object.getUnitId()));
-        sensor.setLocation(object.getLocation());
-        sensor.setDescription(object.getDescription());
-    }
+@Mapper(componentModel = "spring")
+abstract class UnitMapper {
 
-    private Type getType(Integer typeId) {
-        return Optional.ofNullable(typeId).flatMap(typeRepository::findById).orElseThrow(IllegalArgumentException::new);
-    }
+    @Autowired
+    protected UnitRepository unitRepository;
 
-    private Unit getUnit(Integer unitId) {
-        return Optional.ofNullable(unitId).flatMap(unitRepository::findById).orElse(null);
+    protected Unit unitIdToUnit(Integer unitId) {
+        return Optional.ofNullable(unitId)
+                .flatMap(unitRepository::findById)
+                .orElse(null);
     }
 
 }

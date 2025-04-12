@@ -24,29 +24,29 @@ public class SensorService {
 
     public List<SensorReadDto> findAll(SensorFilter sensorFilter) {
         return sensorRepository.findAllByFilter(sensorFilter).stream()
-                .map(sensorReadMapper::map)
+                .map(sensorReadMapper::sensorToSensorReadDto)
                 .toList();
     }
 
     public Optional<SensorReadDto> findById(Integer id) {
-        return sensorRepository.findById(id).map(sensorReadMapper::map);
+        return sensorRepository.findById(id).map(sensorReadMapper::sensorToSensorReadDto);
     }
 
     @Transactional
     public SensorReadDto create(SensorCreateEditDto sensorDto) {
         return Optional.of(sensorDto)
-                .map(sensorCreateEditMapper::map)
+                .map(sensorCreateEditMapper::sensorCreateEditDtoToSensor)
                 .map(sensorRepository::save)
-                .map(sensorReadMapper::map)
+                .map(sensorReadMapper::sensorToSensorReadDto)
                 .orElseThrow();
     }
 
     @Transactional
     public Optional<SensorReadDto> update(Integer id, SensorCreateEditDto sensorDto) {
         return sensorRepository.findById(id)
-                .map(entity -> sensorCreateEditMapper.map(sensorDto, entity))
+                .map(entity -> sensorCreateEditMapper.sensorCreateEditDtoToSensor(sensorDto, entity))
                 .map(sensorRepository::saveAndFlush)
-                .map(sensorReadMapper::map);
+                .map(sensorReadMapper::sensorToSensorReadDto);
     }
 
     @Transactional

@@ -19,11 +19,11 @@ public class TypeService {
     private final TypeReadMapper typeReadMapper;
 
     public List<TypeReadDto> findAll() {
-        return typeRepository.findAll().stream().map(typeReadMapper::map).toList();
+        return typeRepository.findAll().stream().map(typeReadMapper::typeToTypeReadDto).toList();
     }
 
     public Optional<TypeReadDto> findById(Integer id) {
-        return typeRepository.findById(id).map(typeReadMapper::map);
+        return typeRepository.findById(id).map(typeReadMapper::typeToTypeReadDto);
     }
 
 }

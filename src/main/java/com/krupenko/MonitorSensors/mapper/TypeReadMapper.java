@@ -1,18 +1,12 @@
 package com.krupenko.MonitorSensors.mapper;
 
-import com.krupenko.MonitorSensors.dto.TypeReadDto;
 import com.krupenko.MonitorSensors.database.entity.Type;
-import org.springframework.stereotype.Component;
+import com.krupenko.MonitorSensors.dto.TypeReadDto;
+import org.mapstruct.Mapper;
 
-@Component
-public class TypeReadMapper implements Mapper<Type, TypeReadDto> {
+@Mapper(componentModel = "spring")
+public interface TypeReadMapper {
 
-    @Override
-    public TypeReadDto map(Type object) {
-        return new TypeReadDto(
-                object.getId(),
-                object.getValue()
-        );
-    }
+    TypeReadDto typeToTypeReadDto(Type type);
 
 }

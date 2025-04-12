@@ -19,11 +19,11 @@ public class UnitService {
     private final UnitReadMapper unitReadMapper;
 
     public List<UnitReadDto> findAll() {
-        return unitRepository.findAll().stream().map(unitReadMapper::map).toList();
+        return unitRepository.findAll().stream().map(unitReadMapper::unitToUnitReadDto).toList();
     }
 
     public Optional<UnitReadDto> findById(Integer id) {
-        return unitRepository.findById(id).map(unitReadMapper::map);
+        return unitRepository.findById(id).map(unitReadMapper::unitToUnitReadDto);
     }
 
 }

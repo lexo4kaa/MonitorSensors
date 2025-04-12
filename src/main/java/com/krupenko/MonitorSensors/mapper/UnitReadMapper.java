@@ -1,18 +1,12 @@
 package com.krupenko.MonitorSensors.mapper;
 
-import com.krupenko.MonitorSensors.dto.UnitReadDto;
 import com.krupenko.MonitorSensors.database.entity.Unit;
-import org.springframework.stereotype.Component;
+import com.krupenko.MonitorSensors.dto.UnitReadDto;
+import org.mapstruct.Mapper;
 
-@Component
-public class UnitReadMapper implements Mapper<Unit, UnitReadDto> {
+@Mapper(componentModel = "spring")
+public interface UnitReadMapper {
 
-    @Override
-    public UnitReadDto map(Unit object) {
-        return new UnitReadDto(
-                object.getId(),
-                object.getValue()
-        );
-    }
+    UnitReadDto unitToUnitReadDto(Unit unit);
 
 }
